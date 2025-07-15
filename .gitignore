@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.egg-info/
+.pytest_cache/
+.idea/
+.vscode/ # If you use VS Code and want to ignore its config
+.DS_Store # macOS specific
+
+# Playwright
+ms-playwright/
