@@ -65,4 +65,6 @@ jobs:
       if: always() # Always upload, even if tests fail
       with:
         name: products-page-current-screenshot
-        path: tests/steps/snapshots/products_page_current.png # Make sure this path is exact
+        path: |
+          **/snapshots/*.png
+        
