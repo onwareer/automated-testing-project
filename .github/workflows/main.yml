@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     # This is the 'pool' equivalent for GitHub Actions, defining the runner VM image.
-    runs-on: ubuntu-latest # This is the line you're looking for! You can change this to 'windows-latest' if you prefer.
+    runs-on: ubuntu-22.04 # This is the line you're looking for! You can change this to 'windows-latest' if you prefer.
 
     steps:
     # Step 1: Checks out your repository code
