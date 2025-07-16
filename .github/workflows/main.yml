@@ -37,9 +37,9 @@ jobs:
         playwright install --with-deps
 
     # Step 5: Runs Pytest tests and generates reports
+    # pytest tests/steps/ -v --html=test_report.html --self-contained-html --durations=10 --junitxml=junit_results.xml
     - name: Run Pytest tests
       run: |
-        pytest tests/steps/ -v --html=test_report.html --self-contained-html --durations=10 --junitxml=junit_results.xml
         ls -R 
 
     # Step 6: Uploads the JUnit XML test results as an artifact
