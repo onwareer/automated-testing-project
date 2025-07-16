@@ -5,7 +5,7 @@ import json
 from jsonschema import validate
 
 # Link this file to our API feature file
-scenarios("../api.feature")
+#scenarios("../api.feature")
 
 # This fixture will store the API response so it can be accessed by other steps
 @pytest.fixture

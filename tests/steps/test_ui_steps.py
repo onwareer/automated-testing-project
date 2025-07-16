@@ -4,6 +4,7 @@ from pytest_bdd import given, when, then, scenarios, parsers
 import pytest
 from PIL import Image, ImageChops
 import os
+import shutil
 
 
 scenarios("../login.feature")
@@ -45,20 +46,36 @@ def redirected_to_products_page(page):
     assert page.get_by_text("Products").is_visible()
     assert "inventory.html" in page.url
 
+
 @then("the products page layout should be visually correct")
 def visual_check_products_page(page):
+    # Paths relative to the project root (where pytest is run from)
+    snapshots_dir = "snapshots"
+    baseline_path = os.path.join(snapshots_dir, "products_page_baseline.png")
+    current_path = os.path.join(snapshots_dir, "products_page_current.png")
 
-    baseline_path = "snapshots/products_page_baseline.png"
-    current_path = "snapshots/products_page_current.png"
-    os.makedirs("snapshots", exist_ok=True)
+    os.makedirs(snapshots_dir, exist_ok=True)  # Creates 'snapshots' at repo root
+
+    # Take screenshot and save to the 'current_path' at repo root
     page.wait_for_timeout(2000)
     page.screenshot(path=current_path, full_page=True)
-    # First time: save as baseline
+
+    # If baseline doesn't exist, we create it and this specific test step will pass.
+    # This is typical for the *very first* run or a deliberate baseline update run.
     if not os.path.exists(baseline_path):
-        print("[INFO] No baseline found. Saving current screenshot as baseline.")
-        os.rename(current_path, baseline_path)
+        print(f"[INFO] No baseline found. Saving current screenshot as baseline: {baseline_path}")
+        # Copy the current screenshot to be the new baseline
+        shutil.copy(current_path, baseline_path)
+        # Test implicitly passes if it just created the baseline
         return
+
+    # If baseline exists, perform the comparison
     assert compare_images(baseline_path, current_path), "Visual regression detected!"
+
+    # IMPORTANT: Ensure the 'page.evaluate' line for simulating visual changes is
+    # placed *before* page.screenshot(path=current_path, full_page=True)
+    # ONLY when you want to demonstrate a failure.
+    # Currently, assume it's NOT there for initial baseline creation.
 
 # The code for the "Given the user is logged in" step.
 # This makes our test more modular, so we don't have to repeat the login code.

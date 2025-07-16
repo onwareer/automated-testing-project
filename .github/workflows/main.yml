@@ -40,7 +40,7 @@ jobs:
     # pytest tests/steps/ -v --html=test_report.html --self-contained-html --durations=10 --junitxml=junit_results.xml
     - name: Run Pytest tests
       run: |
-        ls -R 
+        pytest tests/steps/ -v --html=test_report.html --self-contained-html --durations=10 --junitxml=junit_results.xml
 
     # Step 6: Uploads the JUnit XML test results as an artifact
     - name: Upload JUnit Test Results
