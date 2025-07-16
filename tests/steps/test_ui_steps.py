@@ -6,7 +6,6 @@ from PIL import Image, ImageChops
 import os
 import shutil
 
-
 scenarios("../login.feature")
 fake = Faker()
 
@@ -51,7 +50,6 @@ def redirected_to_products_page(page):
 def visual_check_products_page(page):
 
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
-
     snapshots_dir = os.path.join(project_root, "snapshots")
     os.makedirs(snapshots_dir, exist_ok=True)
 
@@ -60,10 +58,9 @@ def visual_check_products_page(page):
 
     #baseline_path = "snapshots/products_page_baseline.png"
     #current_path = "snapshots/products_page_current.png"
-
-    print(f"[DEBUG] Saving screenshot to: {current_path}")
+    #print(f"[DEBUG] Saving screenshot to: {current_path}")
     os.makedirs("snapshots", exist_ok=True)
-    page.wait_for_timeout(2000)  # Good for ensuring page is stable
+    page.wait_for_timeout(3000)  # Good for ensuring page is stable
     page.screenshot(path=current_path, full_page=True)
     # First time: save as baseline
     if not os.path.exists(baseline_path):
