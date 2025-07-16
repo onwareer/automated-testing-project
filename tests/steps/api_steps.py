@@ -1,6 +1,8 @@
 from pytest_bdd import given, when, then, scenarios, parsers
 import requests
 import pytest
+import json
+from jsonschema import validate
 
 # Link this file to our API feature file
 scenarios("../api.feature")
@@ -71,3 +73,20 @@ def check_product_title(context, expected_title):
     print(f"DEBUG: Expected Title: '{expected_title}'")
     print(f"DEBUG: Actual Title from API: '{actual_title}'")
     assert product["title"] == expected_title
+
+
+@then("the product response should conform to schema")
+def validate_product_schema(context):
+    product_data = context["response"].json()
+
+    # Load the schema from the JSON file
+    # Make sure the path is correct relative to where pytest is run
+    with open("schemas/product_schema.json") as f:
+        schema = json.load(f)
+
+    # Perform the validation
+    try:
+        validate(instance=product_data, schema=schema)
+        print("INFO: Product response conforms to schema.")
+    except Exception as e:
+        pytest.fail(f"Schema validation failed: {e}")

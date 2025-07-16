@@ -4,6 +4,7 @@
     Given the user is on the login page
     When the user logs in with valid credentials
     Then the user should be redirected to the products page
+    And the products page layout should be visually correct
 
   Scenario: Add an item to the cart and verify
     Given the user is logged in

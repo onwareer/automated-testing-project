@@ -11,4 +11,5 @@ Scenario: Retrieve a single product by ID
     When a request is made to retrieve product with ID "1"
     Then the response status code should be 200
     And the response should contain details for product ID "1"
-    And the product title should be "Fjallraven, Foldsack No. 1 Backpack, Fits 15 Laptops"
+    And the product title should be "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops"
+    And the product response should conform to schema
