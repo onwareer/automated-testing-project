@@ -5,7 +5,7 @@ import json
 from jsonschema import validate
 
 # Link this file to our API feature file
-#scenarios("../api.feature")
+scenarios("../api.feature")
 
 # This fixture will store the API response so it can be accessed by other steps
 @pytest.fixture
@@ -15,8 +15,9 @@ def context():
 @given("the Fake Store API is available")
 def api_available():
     base_url = "https://fakestoreapi.com/"
+    headers = {"User-Agent": "pytest-bdd-ci-client"}
     try:
-        response = requests.get(base_url, timeout=5)  # Add a timeout for robustness
+        response = requests.get(base_url, headers=headers, timeout=5)  # Add a timeout for robustness
         response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
         print(f"API is available! Status: {response.status_code}")
     except requests.exceptions.ConnectionError as e:
@@ -30,7 +31,8 @@ def api_available():
 @when("a request is made to retrieve all products")
 def get_all_products(context):
     # Make the GET request to the products endpoint
-    response = requests.get("https://fakestoreapi.com/products")
+    headers = {"User-Agent": "pytest-bdd-ci-client"}
+    response = requests.get("https://fakestoreapi.com/products", headers=headers)
     # Store the response in the context fixture for later steps
     context["response"] = response
 
@@ -53,8 +55,9 @@ def check_response_is_list(context):
 
 @when(parsers.parse("a request is made to retrieve product with ID \"{product_id}\""))
 def get_single_product(context, product_id):
+    headers = {"User-Agent": "pytest-bdd-ci-client"}
     url = f"https://fakestoreapi.com/products/{product_id}"
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
     context["response"] = response
 # NEW STEP DEFINITION for checking details for a specific product ID
 @then(parsers.parse("the response should contain details for product ID \"{expected_id}\""))
