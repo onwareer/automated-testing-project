@@ -2,18 +2,13 @@ from faker import Faker
 from playwright.sync_api import sync_playwright
 from pytest_bdd import given, when, then, scenarios, parsers
 import pytest
-from PIL import Image, ImageChops
-import os
-import shutil
+
+
+from tests.utils.visual import assert_visual_match
 
 scenarios("../login.feature")
 fake = Faker()
 
-def compare_images(baseline_path, current_path):
-    baseline = Image.open(baseline_path)
-    current = Image.open(current_path)
-    diff = ImageChops.difference(baseline, current)
-    return diff.getbbox() is None
 
 @pytest.fixture
 def page():
@@ -48,32 +43,8 @@ def redirected_to_products_page(page):
 
 @then("the products page layout should be visually correct")
 def visual_check_products_page(page):
-
-    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
-    snapshots_dir = os.path.join(project_root, "snapshots")
-    os.makedirs(snapshots_dir, exist_ok=True)
-
-    baseline_path = os.path.join(snapshots_dir, "products_page_baseline.png")
-    current_path = os.path.join(snapshots_dir, "products_page_current.png")
-
-    #baseline_path = "snapshots/products_page_baseline.png"
-    #current_path = "snapshots/products_page_current.png"
-    #print(f"[DEBUG] Saving screenshot to: {current_path}")
-    os.makedirs("snapshots", exist_ok=True)
-    page.wait_for_timeout(3000)  # Good for ensuring page is stable
-    page.screenshot(path=current_path, full_page=True)
-    # First time: save as baseline
-    if not os.path.exists(baseline_path):
-        print("[INFO] No baseline found. Saving current screenshot as baseline.")
-        shutil.copy(current_path, baseline_path) # keep both baseline and current
-        #os.rename(current_path, baseline_path)
-        return
-    assert compare_images(baseline_path, current_path), "Visual regression detected!"
-
-    # IMPORTANT: Ensure the 'page.evaluate' line for simulating visual changes is
-    # placed *before* page.screenshot(path=current_path, full_page=True)
-    # ONLY when you want to demonstrate a failure.
-    # Currently, assume it's NOT there for initial baseline creation.
+    page.wait_for_selector("text=Products")
+    assert_visual_match(page, "products_page")
 
 # The code for the "Given the user is logged in" step.
 # This makes our test more modular, so we don't have to repeat the login code.
