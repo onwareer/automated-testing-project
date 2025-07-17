@@ -4,7 +4,7 @@ import pytest
 
 # Use the scenarios function to link the feature file to this test file.
 # We pass in the file path to our feature file.
-scenarios("../login.feature")
+scenarios("../ui.feature")
 
 # A Pytest fixture to manage the Playwright browser context.
 # This ensures a new browser is opened for each test.

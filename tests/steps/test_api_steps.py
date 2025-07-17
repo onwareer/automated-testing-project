@@ -68,7 +68,7 @@ def get_single_product(context, product_id):
     response = requests.get(url, headers=HEADERS)
     context["response"] = response
 
-# NEW STEP DEFINITION for checking details for a specific product ID
+#checking details for a specific product ID
 @then(parsers.parse("the response should contain details for product ID \"{expected_id}\""))
 def check_single_product_details(context, expected_id):
     product = context["response"].json()
@@ -76,7 +76,7 @@ def check_single_product_details(context, expected_id):
     assert "id" in product
     assert str(product["id"]) == expected_id # Convert to string for comparison
 
-# NEW STEP DEFINITION for checking the product title
+#checking the product title
 @then(parsers.parse("the product title should be \"{expected_title}\""))
 def check_product_title(context, expected_title):
     product = context["response"].json()

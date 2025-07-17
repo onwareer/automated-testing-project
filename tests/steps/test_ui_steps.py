@@ -6,16 +6,15 @@ import pytest
 
 from tests.utils.visual import assert_visual_match
 
-scenarios("../login.feature")
+scenarios("../ui.feature")
 fake = Faker()
-
 
 @pytest.fixture
 def page():
     with sync_playwright() as p:
-        # We'll run in headless mode for CI/CD.
+        # Run in headless mode for CI/CD.
         # headless=False to see the browser during development
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
         yield page
         browser.close()
@@ -25,14 +24,14 @@ def on_login_page(page):
     page.goto("https://www.saucedemo.com/")
     assert "Swag Labs" in page.title()
 
-# The code for the "When" step. It defines the action of logging in.
+# Defines the action of logging in.
 @when("the user logs in with valid credentials")
 def login_with_valid_credentials(page):
     page.fill("#user-name", "standard_user")
     page.fill("#password", "secret_sauce")
     page.click("#login-button")
 
-# The code for the "Then" step. It defines the expected result.
+#Defines the expected result.
 @then("the user should be redirected to the products page")
 def redirected_to_products_page(page):
     # We will now check for the unique page title "Products".
@@ -46,7 +45,7 @@ def visual_check_products_page(page):
     assert_visual_match(page, "products_page")
 
 # The code for the "Given the user is logged in" step.
-# This makes our test more modular, so we don't have to repeat the login code.
+# So we don't have to repeat the login code.
 @given("the user is logged in")
 def logged_in_user(page):
     page.goto("https://www.saucedemo.com/")
@@ -77,7 +76,6 @@ def complete_checkout_process(page):
     first_name = fake.first_name()
     last_name = fake.last_name()
     postal_code = fake.postcode()  # Generates a realistic postal code
-
     page.fill("input#first-name", "Test")
     page.fill("input#last-name", "User")
     page.fill("input#postal-code", "12345")
