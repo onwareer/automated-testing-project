@@ -13,7 +13,7 @@ fake = Faker()
 @pytest.fixture
 def page():
     with sync_playwright() as p:
-        # We'll run in headless mode for CI/CD, but you can change to
+        # We'll run in headless mode for CI/CD.
         # headless=False to see the browser during development
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
@@ -32,14 +32,13 @@ def login_with_valid_credentials(page):
     page.fill("#password", "secret_sauce")
     page.click("#login-button")
 
-# The code for the "Then" step. It defines the expected outcome.
+# The code for the "Then" step. It defines the expected result.
 @then("the user should be redirected to the products page")
 def redirected_to_products_page(page):
-    # We will now check for the unique page title "Products"
+    # We will now check for the unique page title "Products".
     # This is a much more reliable way to confirm we are on the right page.
     assert page.get_by_text("Products").is_visible()
     assert "inventory.html" in page.url
-
 
 @then("the products page layout should be visually correct")
 def visual_check_products_page(page):

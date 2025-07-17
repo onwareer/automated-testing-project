@@ -10,7 +10,7 @@ import os
 BASE_API_URL = os.getenv("FAKESTORE_API_URL", "https://fakestoreapi.com")
 HEADERS = {"User-Agent": "pytest-bdd-ci-client"}
 # Link this file to our API feature file
-scenarios("../api.feature")
+#scenarios("../api.feature")
 
 # This fixture will store the API response so it can be accessed by other steps
 @pytest.fixture

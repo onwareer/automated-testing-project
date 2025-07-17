@@ -40,10 +40,6 @@ jobs:
       run: |
         playwright install --with-deps
 
-    #Temporary step to check connection for API tests
-    - name: Check API connectivity
-      run: curl -I https://fakestoreapi.com/products
-
     # Step 5: Runs Pytest tests and generates reports
     # pytest tests/steps/ -v --html=test_report.html --self-contained-html --durations=10 --junitxml=junit_results.xml
     - name: Run Pytest tests

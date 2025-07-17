@@ -1,6 +1,6 @@
- Feature: Product API functionality
+Feature: Product API functionality
 
-  Scenario: Retrieve all products
+Scenario: Retrieve all products
     Given the Fake Store API is available
     When a request is made to retrieve all products
     Then the response status code should be 200
