@@ -14,7 +14,7 @@ def page():
     with sync_playwright() as p:
         # Run in headless mode for CI/CD.
         # headless=False to see the browser during development
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         yield page
         browser.close()
@@ -55,11 +55,6 @@ def logged_in_user(page):
     page.click("#login-button")
     assert page.get_by_text("Products").is_visible()
 
-@given("the user has a \"Sauce Labs Backpack\" in the cart")
-def add_backpack_to_cart(page):
-    logged_in_user(page)
-    page.click("button#add-to-cart-sauce-labs-backpack")
-    assert page.locator(".shopping_cart_badge").is_visible()
 
 @when(parsers.parse("the user adds a \"{item}\" to the cart"))
 def add_item_to_cart(page, item):
@@ -67,6 +62,18 @@ def add_item_to_cart(page, item):
     # and use it to locate the correct "Add to cart" button.
     item_locator = f"button[id^='add-to-cart-'][name*='{item.replace(' ', '-').lower()}']"
     page.click(item_locator)
+
+@then(parsers.parse("the cart should contain \"{count}\" item"))
+def cart_contains_item(page, count):
+    # This step uses a parser to verify the count of items in the cart.
+    cart_count = page.locator(".shopping_cart_badge").inner_text()
+    assert cart_count == count
+
+@given("the user has a \"Sauce Labs Backpack\" in the cart")
+def add_backpack_to_cart(page):
+    logged_in_user(page)
+    page.click("button#add-to-cart-sauce-labs-backpack")
+    assert page.locator(".shopping_cart_badge").is_visible()
 
 @when("the user completes the checkout process")
 def complete_checkout_process(page):
@@ -81,12 +88,6 @@ def complete_checkout_process(page):
     page.fill("input#postal-code", "12345")
     page.click("input#continue")
     page.click("button#finish")
-
-@then(parsers.parse("the cart should contain \"{count}\" item"))
-def cart_contains_item(page, count):
-    # This step uses a parser to verify the count of items in the cart.
-    cart_count = page.locator(".shopping_cart_badge").inner_text()
-    assert cart_count == count
 
 @then("the order confirmation message is displayed")
 def order_confirmation_displayed(page):
