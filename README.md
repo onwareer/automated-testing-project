@@ -74,7 +74,7 @@ Live feedback on the build status
 
 * **Note** API tests have been currently diabled due to a connection issue between https://fakestoreapi.com and CI environment despite running successfull in the local machine.
 
-### 📢 What's next**
+### 📢 Next Phases**
 
 * **Mock API:** Implement Mock No-Hosting API setup to solve connection issue for API tests.
 * **Explore Third-party tools for visual regression:** Percy (by BrowserStack) and Applitools Eyes
